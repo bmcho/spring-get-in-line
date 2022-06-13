@@ -1,4 +1,4 @@
-package com.getin.bm.domain;
+package com.bm.getin.domain;
 
 import lombok.Data;
 

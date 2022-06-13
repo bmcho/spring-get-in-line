@@ -1,6 +1,6 @@
-package com.getin.bm.domain;
+package com.bm.getin.domain;
 
-import com.getin.bm.constant.EventStatus;
+import com.bm.getin.constant.EventStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;

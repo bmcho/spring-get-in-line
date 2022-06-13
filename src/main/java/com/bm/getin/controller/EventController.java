@@ -1,21 +1,21 @@
-package com.getin.bm.controller;
+package com.bm.getin.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/events")
 @Controller
-@RequestMapping("/places")
-public class PlaceController {
+public class EventController {
 
     @GetMapping("/")
-    public String places() {
-        return "place/index";
+    public String events() {
+        return "event/index";
     }
 
-    @GetMapping("/{placeId}")
-    public String placesDetail(@PathVariable Integer placeId) {
-        return "place/detail";
+    @GetMapping("/{eventId}")
+    public String eventsDetail(@PathVariable Integer eventsId) {
+        return "event/detail";
     }
 }

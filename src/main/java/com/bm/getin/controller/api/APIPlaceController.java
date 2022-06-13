@@ -1,4 +1,4 @@
-package com.getin.bm.controller.api;
+package com.bm.getin.controller.api;
 
 import org.springframework.web.bind.annotation.*;
 

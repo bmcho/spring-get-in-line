@@ -1,4 +1,4 @@
-package com.getin.bm.controller;
+package com.bm.getin.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

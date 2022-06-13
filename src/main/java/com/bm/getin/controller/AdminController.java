@@ -1,7 +1,7 @@
-package com.getin.bm.controller;
+package com.bm.getin.controller;
 
-import com.getin.bm.constant.EventStatus;
-import com.getin.bm.constant.PlaceType;
+import com.bm.getin.constant.EventStatus;
+import com.bm.getin.constant.PlaceType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
