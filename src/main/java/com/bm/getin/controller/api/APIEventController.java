@@ -1,5 +1,10 @@
 package com.bm.getin.controller.api;
 
+import com.bm.getin.constant.ErrorCode;
+import com.bm.getin.dto.APIErrorResponse;
+import com.bm.getin.exception.GeneralException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,5 +36,18 @@ public class APIEventController {
     @DeleteMapping("/events/{eventId}")
     public Boolean deleteEvent(@PathVariable Integer eventId) {
         return true;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<APIErrorResponse> general(GeneralException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        HttpStatus status = errorCode.isClientSideError() ?
+                HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return ResponseEntity
+                .status(status)
+                .body(APIErrorResponse.of(
+                        false, errorCode, errorCode.getMessage(e)
+                ));
     }
 }
