@@ -1,5 +1,8 @@
 package com.bm.getin.controller.api;
 
+import com.bm.getin.constant.PlaceType;
+import com.bm.getin.dto.APIDataResponse;
+import com.bm.getin.dto.PlaceDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,18 +12,38 @@ import java.util.List;
 public class APIPlaceController {
 
     @GetMapping("/places")
-    public List<String> getPlaces() {
-        return List.of("place1", "place2");
+    public APIDataResponse<List<PlaceDTO>> getPlaces() {
+
+        return APIDataResponse.of(List.of(PlaceDTO.of(
+                PlaceType.COMMON,
+                "칼라배드민턴",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30,
+                "신장개업"
+        )));
     }
 
     @PostMapping("/places")
-    public Boolean createPlace() {
+     public Boolean createPlace() {
         return true;
     }
 
     @GetMapping("/places/{placeId}")
-    public String getPlace(@PathVariable Integer placeId) {
-        return "event " + placeId;
+    public APIDataResponse<PlaceDTO> getPlace(@PathVariable Integer placeId) {
+        if (placeId.equals(2)) {
+            return APIDataResponse.of(null);
+        }
+
+
+        return APIDataResponse.of(PlaceDTO.of(
+                PlaceType.COMMON,
+                "칼라배드민턴",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30,
+                "신장개업"
+        ));
     }
 
     @PutMapping("/places/{placeId}")

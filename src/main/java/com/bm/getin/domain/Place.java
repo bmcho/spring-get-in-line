@@ -14,6 +14,8 @@ public class Place {
 
     private String placeName;
 
+    private String address;
+
     private String phoneNumber;
 
     private Integer capacity;
