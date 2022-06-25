@@ -21,12 +21,15 @@ class APIPlaceControllerTest {
         this.mvc = mvc;
     }
 
+
     @Test
-    @DisplayName("[API] [GET] 장소 리스트 조회")
-    void givenNothing_whenRequestingPlaces_thenReturnListOfPlacesInStandardResponse() throws  Exception{
+    @DisplayName("[API] [GET} 장소 리스트 조회 - 장소 리스트 데이터를 담은 표준 API 출력")
+    void givenNothing_whenRequestingPlaces_thenReturnPlacesInStandardResponse() throws Exception{
+        // Given
+        // When & Then
         mvc.perform(get("/api/places"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data[0].placeType").value(PlaceType.COMMON.name()))
                 .andExpect(jsonPath("$.data[0].placeName").value("칼라배드민턴"))
@@ -34,9 +37,9 @@ class APIPlaceControllerTest {
                 .andExpect(jsonPath("$.data[0].phoneNumber").value("010-1234-5678"))
                 .andExpect(jsonPath("$.data[0].capacity").value(30))
                 .andExpect(jsonPath("$.data[0].memo").value("신장개업"))
+                .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
-                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()))
-                .andDo(print());
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
     }
 
     @Test
