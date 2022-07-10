@@ -1,21 +1,22 @@
 package com.bm.getin.controller.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.bm.getin.dto.APIDataResponse;
+import com.bm.getin.dto.AdminRequest;
+import com.bm.getin.dto.LoginRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class APIAuthController {
 
-    @GetMapping("/sigh-up")
-    public String sighUp() {
-        return "sigh-up done.";
+    @PostMapping("/sign-up")
+    public APIDataResponse<String> sighUp(@RequestBody AdminRequest adminRequest) {
+        return APIDataResponse.empty();
     }
 
 
-    @GetMapping("/login")
-    public String login() {
-        return "login done.";
+    @PostMapping("/login")
+    public APIDataResponse<String> login(@RequestBody LoginRequest loginRequest) {
+        return APIDataResponse.empty();
     }
 }
