@@ -1,10 +1,10 @@
-package com.getin.bm;
+package com.bm.getin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BmApplicationTests {
+class GetInApplicationTests {
 
 	@Test
 	void contextLoads() {
