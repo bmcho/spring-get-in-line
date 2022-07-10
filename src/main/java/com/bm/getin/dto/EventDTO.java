@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record EventDTO(
         Long placeId,
         String eventName,
-        EventStatus eventType,
+        EventStatus eventStatus,
         LocalDateTime eventStartDatetime,
         LocalDateTime eventEndDatetime,
         Integer currentNumberOfPeople,
