@@ -3,7 +3,9 @@ package com.bm.getin.controller.api;
 import com.bm.getin.constant.PlaceType;
 import com.bm.getin.dto.APIDataResponse;
 import com.bm.getin.dto.PlaceDTO;
+import com.bm.getin.dto.PlaceRequest;
 import com.bm.getin.dto.PlaceResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +26,10 @@ public class APIPlaceController {
         )));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/places")
-     public Boolean createPlace() {
-        return true;
+    public APIDataResponse<Void> createPlace(@RequestBody PlaceRequest placeRequest) {
+        return APIDataResponse.empty();
     }
 
     @GetMapping("/places/{placeId}")
@@ -47,12 +50,15 @@ public class APIPlaceController {
     }
 
     @PutMapping("/places/{placeId}")
-    public Boolean modifyPlace(@PathVariable Integer placeId) {
-        return true;
+    public APIDataResponse<Void> modifyPlace(
+            @PathVariable Long placeId,
+            @RequestBody PlaceRequest placeRequest
+    ) {
+        return APIDataResponse.empty();
     }
 
     @DeleteMapping("/places/{placeId}")
-    public Boolean deletePlace(@PathVariable Integer placeId) {
-        return true;
+    public APIDataResponse<Void> removePlace(@PathVariable Long placeId) {
+        return APIDataResponse.empty();
     }
 }

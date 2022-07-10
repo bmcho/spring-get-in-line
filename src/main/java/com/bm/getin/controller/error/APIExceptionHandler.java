@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.util.WebUtils;
 
 @RestControllerAdvice(annotations = RestController.class)
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {
@@ -22,11 +21,6 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = errorCode.isClientSideError() ?
                 HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
 
-//        return ResponseEntity
-//                .status(status)
-//                .body(APIErrorResponse.of(
-//                        false, errorCode, errorCode.getMessage(e)
-//                ));
         return super.handleExceptionInternal(
                 e,
                 APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(e)),
@@ -41,11 +35,6 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-//        return ResponseEntity
-//                .status(status)
-//                .body(APIErrorResponse.of(
-//                        false, errorCode, errorCode.getMessage(e)
-//                ));
         return super.handleExceptionInternal(
                 e,
                 APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(e)),
