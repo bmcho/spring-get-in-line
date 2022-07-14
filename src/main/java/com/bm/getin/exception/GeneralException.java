@@ -28,6 +28,11 @@ public class GeneralException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    public GeneralException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode.getMessage(), cause);
+        this.errorCode = errorCode;
+    }
+
     public GeneralException(Throwable cause) {
         super(cause);
         this.errorCode = ErrorCode.INTERNAL_ERROR;
