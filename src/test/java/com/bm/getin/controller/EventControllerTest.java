@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@DisplayName("View 컨트롤러 - 이벤트")
 @WebMvcTest(EventController.class)
 class EventControllerTest {
 

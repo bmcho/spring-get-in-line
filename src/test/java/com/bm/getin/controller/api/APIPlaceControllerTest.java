@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+@DisplayName("API 컨트롤러 - 장소")
 @WebMvcTest(APIPlaceController.class)
 class APIPlaceControllerTest {
 

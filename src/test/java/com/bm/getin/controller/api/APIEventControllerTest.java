@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.containsString;
 
+@DisplayName("API 컨트롤러 - 이벤트")
 @WebMvcTest(APIEventController.class)
 class APIEventControllerTest {
 

@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+@DisplayName("에러 처리 - 에러 코드")
 class ErrorCodeTest {
 
     @DisplayName("예외를 받으면, 예외 메세지가 포함된 메세지 출력")
