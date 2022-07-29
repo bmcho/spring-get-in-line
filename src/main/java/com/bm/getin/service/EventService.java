@@ -44,7 +44,12 @@ public class EventService {
     }
 
     public boolean createEvent(EventDTO eventDTO) {
-        return eventRepository.insertEvent(eventDTO);
+        try {
+            return eventRepository.insertEvent(eventDTO);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     public boolean modifyEvent(Long eventId, EventDTO eventDTO) {

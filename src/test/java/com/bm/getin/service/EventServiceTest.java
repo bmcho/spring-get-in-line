@@ -52,7 +52,7 @@ class EventServiceTest {
 
     @Test
     @DisplayName("검색 조건입력과 함께 이벤트 검색 시, 전체 결과 출력")
-    void givenSearchParams_whenSearchingEvents_thenReturnsEntireEventList() {
+    void givenSearchParameters_whenSearchingEvents_thenReturnsEventList() {
         // Given
         Long placeId = 1L;
         String eventName = "오전 운동";
@@ -313,7 +313,7 @@ class EventServiceTest {
         then(eventRepository).should().deleteEvent(null);
     }
 
-    private EventDTO createEventDTO(long placeId, String eventName, boolean isMorning) {
+    private EventDTO createEventDTO(Long placeId, String eventName, boolean isMorning) {
         String hourStart = isMorning ? "09" : "13";
         String hourEnd = isMorning ? "12" : "16";
 
@@ -327,13 +327,14 @@ class EventServiceTest {
     }
 
     private EventDTO createEventDTO(
-            long placeId,
+            Long placeId,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDateTime,
             LocalDateTime eventEndDateTime
     ) {
         return EventDTO.of(
+                1L,
                 placeId,
                 eventName,
                 eventStatus,
