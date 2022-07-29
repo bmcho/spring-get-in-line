@@ -22,7 +22,7 @@ public enum ErrorCode {
     private final ErrorCategory errorCategory;
     private final String message;
 
-    public String getMessage(Exception e) {
+    public String getMessage(Throwable e) {
         return getMessage(this.getMessage() + " - " + e.getMessage());
     }
 
