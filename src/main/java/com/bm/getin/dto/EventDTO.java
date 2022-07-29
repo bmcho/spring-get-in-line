@@ -5,7 +5,6 @@ import com.bm.getin.constant.EventStatus;
 import java.time.LocalDateTime;
 
 public record EventDTO(
-        Long id,
         Long placeId,
         String eventName,
         EventStatus eventStatus,
@@ -18,7 +17,6 @@ public record EventDTO(
         LocalDateTime modifiedAt
 ) {
     public static EventDTO of(
-            Long id,
             Long placeId,
             String eventName,
             EventStatus eventType,
@@ -31,7 +29,6 @@ public record EventDTO(
             LocalDateTime modifiedAt
     ) {
         return new EventDTO(
-                id,
                 placeId,
                 eventName,
                 eventType,

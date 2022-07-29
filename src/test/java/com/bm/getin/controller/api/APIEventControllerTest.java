@@ -214,34 +214,18 @@ class APIEventControllerTest {
         then(eventService).should().getEvent(eventId);
     }
 
-    @DisplayName("[API][GET] 단일 이벤트 조회 - 파라미터 잘못된 경우, 빈 표준 API 출력")
-    @Test
-    void givenWrongEventId_whenRequestingNonexistentEvent_thenReturnsFailedStandardResponse() throws Exception {
-        // Given
-        long eventId = 0L;
-
-        // When & Then
-        mvc.perform(get("/api/events/" + eventId))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.errorCode").value(ErrorCode.VALIDATION_ERROR.getCode()))
-                .andExpect(jsonPath("$.message").value(containsString(ErrorCode.VALIDATION_ERROR.getMessage())));
-        then(eventService).shouldHaveNoInteractions();
-    }
 
     @DisplayName("[API][PUT] 이벤트 변경")
     @Test
-    void givenEventIdAndInfo_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
+    void givenEvent_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        EventResponse eventResponse = EventResponse.of(
-                eventId,
+        EventRequest eventRequest = EventRequest.of(
                 1L,
                 "오후 운동",
                 EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                LocalDateTime.of(2022, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2022, 1, 1, 16, 0, 0),
                 0,
                 24,
                 "마스크 꼭 착용하세요"
@@ -252,7 +236,7 @@ class APIEventControllerTest {
         mvc.perform(
                         put("/api/events/" + eventId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(eventResponse))
+                                .content(mapper.writeValueAsString(eventRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -270,7 +254,6 @@ class APIEventControllerTest {
         // Given
         long eventId = 0L;
         EventResponse eventResponse = EventResponse.of(
-                eventId,
                 0L,
                 "  ",
                 null,
@@ -331,7 +314,6 @@ class APIEventControllerTest {
     }
     private EventDTO createEventDTO() {
         return EventDTO.of(
-                1L,
                 1L,
                 "오후 운동",
                 EventStatus.OPENED,
