@@ -25,7 +25,7 @@ public class BaseExceptionHandler {
                 Map.of(
                         "statusCode", status.value(),
                         "errorCode", errorCode,
-                        "message", errorCode.getMessage(e)
+                        "message", errorCode.getMessage()
                 ),
                 status
         );
@@ -46,5 +46,4 @@ public class BaseExceptionHandler {
                 status
         );
     }
-
 }
