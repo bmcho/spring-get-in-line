@@ -5,6 +5,7 @@ import com.bm.getin.constant.EventStatus;
 import java.time.LocalDateTime;
 
 public record EventResponse(
+        Long id,
         Long placeId,
         String eventName,
         EventStatus eventStatus,
@@ -15,6 +16,7 @@ public record EventResponse(
         String memo
 ) {
     public static EventResponse of(
+            Long id,
             Long placeId,
             String eventName,
             EventStatus eventStatus,
@@ -25,6 +27,7 @@ public record EventResponse(
             String memo
     ) {
         return new EventResponse(
+                id,
                 placeId,
                 eventName,
                 eventStatus,
@@ -41,6 +44,7 @@ public record EventResponse(
             return null;
         }
         return EventResponse.of(
+                eventDTO.id(),
                 eventDTO.placeId(),
                 eventDTO.eventName(),
                 eventDTO.eventStatus(),
