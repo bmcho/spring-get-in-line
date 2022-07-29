@@ -8,27 +8,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 
-@RequiredArgsConstructor
 @Configuration
 public class ThymeleafConfig {
 
-    private final Thymeleaf3Properties thymeleaf3Properties;
-
     @Bean
-    public SpringResourceTemplateResolver thymeleafTemplateResolver(SpringResourceTemplateResolver defaultTemplateResolver) {
-         defaultTemplateResolver.setUseDecoupledLogic(this.thymeleaf3Properties.isDecoupledLogic());
+    public SpringResourceTemplateResolver thymeleafTemplateResolver(
+            SpringResourceTemplateResolver defaultTemplateResolver,
+            Thymeleaf3Properties thymeleaf3Properties
+    ) {
+        defaultTemplateResolver.setUseDecoupledLogic(thymeleaf3Properties.isDecoupledLogic());
 
-         return defaultTemplateResolver;
+        return defaultTemplateResolver;
     }
+
 
     @Getter
     @RequiredArgsConstructor
     @ConstructorBinding
     @ConfigurationProperties("spring.thymeleaf3")
-    public static class Thymeleaf3Properties{
+    public static class Thymeleaf3Properties {
         /**
          * Thymeleaf 3 Decoupled Logic 활성화
          */
         private final boolean decoupledLogic;
     }
+
 }
