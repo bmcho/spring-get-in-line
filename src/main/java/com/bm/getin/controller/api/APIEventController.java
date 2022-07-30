@@ -21,10 +21,10 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Validated
+//@Validated
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class APIEventController {
 
     private final EventService eventService;

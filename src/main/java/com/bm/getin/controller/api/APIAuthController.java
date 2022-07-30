@@ -5,8 +5,8 @@ import com.bm.getin.dto.AdminRequest;
 import com.bm.getin.dto.LoginRequest;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class APIAuthController {
 
     @PostMapping("/sign-up")
