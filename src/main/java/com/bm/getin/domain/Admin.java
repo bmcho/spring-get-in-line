@@ -43,7 +43,7 @@ public class Admin {
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @Setters
+    @Setter
     private String memo;
 
     @Column(nullable = false, insertable = false, updatable = false,
