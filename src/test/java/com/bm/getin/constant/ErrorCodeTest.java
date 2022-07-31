@@ -12,11 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+@DisplayName("에러 처리 - 에러 코드")
 class ErrorCodeTest {
 
+    @DisplayName("예외를 받으면, 예외 메세지가 포함된 메세지 출력")
     @ParameterizedTest(name = "[{index}] {0} ===> {1}")
     @MethodSource
-    @DisplayName("예외를 받으면, 예외 메세지가 포함된 메세지 출력")
     void givenExceptionWithMessage_whenGettingMessage_thenReturnsMessage(ErrorCode sut, String expected) {
         // Given
         Exception e = new Exception("This is test message.");
@@ -34,15 +35,16 @@ class ErrorCodeTest {
                 arguments(ErrorCode.BAD_REQUEST, "Bad request - This is test message."),
                 arguments(ErrorCode.SPRING_BAD_REQUEST, "Spring-detected bad request - This is test message."),
                 arguments(ErrorCode.VALIDATION_ERROR, "Validation error - This is test message."),
+                arguments(ErrorCode.NOT_FOUND, "Requested resource is not found - This is test message."),
                 arguments(ErrorCode.INTERNAL_ERROR, "Internal error - This is test message."),
                 arguments(ErrorCode.SPRING_INTERNAL_ERROR, "Spring-detected internal error - This is test message."),
                 arguments(ErrorCode.DATA_ACCESS_ERROR, "Data access error - This is test message.")
         );
     }
 
+    @DisplayName("에러 메시지를 받으면, 해당 에러 메시지로 출력")
     @ParameterizedTest(name = "[{index}] \"{0}\" ===> \"{1}\"")
     @MethodSource
-    @DisplayName("에러 메시지를 받으면, 해당 에러 메시지로 출력")
     void givenMessage_whenGettingMessage_thenReturnsMessage(String input, String expected) {
         // Given
 

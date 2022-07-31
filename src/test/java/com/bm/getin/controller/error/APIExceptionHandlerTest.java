@@ -20,6 +20,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("핸들러 - API 에러 처리")
 class APIExceptionHandlerTest {
 
     private APIExceptionHandler sut;

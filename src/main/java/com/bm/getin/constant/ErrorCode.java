@@ -14,6 +14,7 @@ public enum ErrorCode {
     BAD_REQUEST(10000, ErrorCategory.CLIENT_SIDE, "Bad request"),
     SPRING_BAD_REQUEST(10001, ErrorCategory.CLIENT_SIDE, "Spring-detected bad request"),
     VALIDATION_ERROR(10002, ErrorCategory.CLIENT_SIDE, "Validation error"),
+    NOT_FOUND(10003, ErrorCategory.CLIENT_SIDE, "Requested resource is not found"),
     INTERNAL_ERROR(20000, ErrorCategory.SERVER_SIDE, "Internal error"),
     SPRING_INTERNAL_ERROR(20001, ErrorCategory.SERVER_SIDE, "Spring-detected internal error"),
     DATA_ACCESS_ERROR(20002, ErrorCategory.SERVER_SIDE, "Data access error");
@@ -22,7 +23,7 @@ public enum ErrorCode {
     private final ErrorCategory errorCategory;
     private final String message;
 
-    public String getMessage(Exception e) {
+    public String getMessage(Throwable e) {
         return getMessage(this.getMessage() + " - " + e.getMessage());
     }
 

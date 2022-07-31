@@ -4,6 +4,7 @@ import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.dto.AdminRequest;
 import com.bm.getin.dto.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
+@DisplayName("API 컨트롤러 - 인증")
+@WebMvcTest(APIAuthController.class)
 class APIAuthControllerTest {
 
     private final MockMvc mvc;
