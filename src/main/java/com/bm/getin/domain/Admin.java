@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Table(indexes = {
         @Index(columnList = "phoneNumber"),
-        @Index(columnList = "createAt"),
+        @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
 @Entity

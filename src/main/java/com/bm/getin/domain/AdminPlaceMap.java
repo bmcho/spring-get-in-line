@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Table(indexes = {
         @Index(columnList = "adminId"),
         @Index(columnList = "placeId"),
-        @Index(columnList = "createAt"),
+        @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
 @EntityListeners(AuditingEntityListener.class)
