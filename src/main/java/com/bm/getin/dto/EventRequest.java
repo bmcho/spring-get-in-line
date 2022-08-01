@@ -40,7 +40,7 @@ public record EventRequest(
         );
     }
 
-    public EventDto ToDTO() {
+    public EventDto ToDto() {
         return EventDto.of(
                 null,
                 this.placeId(),

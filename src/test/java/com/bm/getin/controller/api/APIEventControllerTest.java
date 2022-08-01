@@ -51,7 +51,7 @@ class APIEventControllerTest {
     void givenParams_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
         // Given
         given(eventService.getEvents(any(), any(), any(), any(), any()))
-                .willReturn(List.of(createEventDTO()));
+                .willReturn(List.of(createEventDto()));
         // When & Then
         mvc.perform(
                         get("/api/events")
@@ -172,7 +172,7 @@ class APIEventControllerTest {
     void givenEventId_whenRequestingExistentEvent_thenReturnsEventInStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        given(eventService.getEvent(eventId)).willReturn(Optional.of(createEventDTO()));
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(createEventDto()));
 
         // When & Then
         mvc.perform(get("/api/events/" + eventId))
@@ -331,7 +331,7 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.message").value(containsString(ErrorCode.VALIDATION_ERROR.getMessage())));
         then(eventService).shouldHaveNoInteractions();
     }
-    private EventDto createEventDTO() {
+    private EventDto createEventDto() {
         return EventDto.of(
                 1L,
                 1L,

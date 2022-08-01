@@ -39,20 +39,20 @@ public record EventResponse(
         );
     }
 
-    public static EventResponse from(EventDto eventDTO) {
-        if (eventDTO == null) {
+    public static EventResponse from(EventDto eventDto) {
+        if (eventDto == null) {
             return null;
         }
         return EventResponse.of(
-                eventDTO.id(),
-                eventDTO.placeId(),
-                eventDTO.eventName(),
-                eventDTO.eventStatus(),
-                eventDTO.eventStartDatetime(),
-                eventDTO.eventEndDatetime(),
-                eventDTO.currentNumberOfPeople(),
-                eventDTO.capacity(),
-                eventDTO.memo()
+                eventDto.id(),
+                eventDto.placeId(),
+                eventDto.eventName(),
+                eventDto.eventStatus(),
+                eventDto.eventStartDatetime(),
+                eventDto.eventEndDatetime(),
+                eventDto.currentNumberOfPeople(),
+                eventDto.capacity(),
+                eventDto.memo()
         );
     }
 }

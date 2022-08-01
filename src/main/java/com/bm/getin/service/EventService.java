@@ -52,13 +52,13 @@ public class EventService {
         }
     }
 
-    public boolean createEvent(EventDto eventDTO) {
+    public boolean createEvent(EventDto eventDto) {
         try {
-            if (eventDTO == null) {
+            if (eventDto == null) {
                 return false;
             }
 
-            eventRepository.save(eventDTO.toEntity());
+            eventRepository.save(eventDto.toEntity());
             return true;
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
