@@ -39,7 +39,7 @@ public record EventResponse(
         );
     }
 
-    public static EventResponse from(EventDTO eventDTO) {
+    public static EventResponse from(EventDto eventDTO) {
         if (eventDTO == null) {
             return null;
         }

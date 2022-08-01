@@ -2,7 +2,7 @@ package com.bm.getin.dto;
 
 import com.bm.getin.constant.PlaceType;
 
-public record PlaceDTO(
+public record PlaceDto(
         PlaceType placeType,
         String placeName,
         String address,
@@ -10,7 +10,7 @@ public record PlaceDTO(
         Integer capacity,
         String memo
 ) {
-    public static PlaceDTO of(
+    public static PlaceDto of(
             PlaceType placeType,
             String placeName,
             String address,
@@ -18,6 +18,6 @@ public record PlaceDTO(
             Integer capacity,
             String memo
     ) {
-        return new PlaceDTO(placeType, placeName, address, phoneNumber, capacity, memo);
+        return new PlaceDto(placeType, placeName, address, phoneNumber, capacity, memo);
     }
 }

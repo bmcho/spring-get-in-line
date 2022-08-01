@@ -2,14 +2,13 @@ package com.bm.getin.controller;
 
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
-import com.bm.getin.dto.EventDTO;
-import com.bm.getin.dto.PlaceDTO;
+import com.bm.getin.dto.EventDto;
+import com.bm.getin.dto.PlaceDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -37,7 +36,7 @@ public class AdminController {
     @GetMapping("/places/{placesId}")
     public ModelAndView adminPlacesDetail(@PathVariable Integer placesId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("place", PlaceDTO.of(
+        map.put("place", PlaceDto.of(
                 PlaceType.COMMON,
                 "즐거운배드민턴장",
                 "서울시 강남구 강남대로 1",
@@ -70,7 +69,7 @@ public class AdminController {
     @GetMapping("/events/{eventId}")
     public ModelAndView adminEventDetail(@PathVariable Long eventId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("event", EventDTO.of(
+        map.put("event", EventDto.of(
                 eventId,
                 1L,
                 "오후 운동",

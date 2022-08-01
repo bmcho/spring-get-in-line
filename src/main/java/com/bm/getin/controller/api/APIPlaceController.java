@@ -2,7 +2,7 @@ package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.PlaceType;
 import com.bm.getin.dto.APIDataResponse;
-import com.bm.getin.dto.PlaceDTO;
+import com.bm.getin.dto.PlaceDto;
 import com.bm.getin.dto.PlaceRequest;
 import com.bm.getin.dto.PlaceResponse;
 import org.springframework.http.HttpStatus;
@@ -33,13 +33,13 @@ public class APIPlaceController {
     }
 
     @GetMapping("/places/{placeId}")
-    public APIDataResponse<PlaceDTO> getPlace(@PathVariable Integer placeId) {
+    public APIDataResponse<PlaceDto> getPlace(@PathVariable Integer placeId) {
         if (placeId.equals(2)) {
             return APIDataResponse.of(null);
         }
 
 
-        return APIDataResponse.of(PlaceDTO.of(
+        return APIDataResponse.of(PlaceDto.of(
                 PlaceType.COMMON,
                 "칼라배드민턴",
                 "서울시 강남구 강남대로 1234",

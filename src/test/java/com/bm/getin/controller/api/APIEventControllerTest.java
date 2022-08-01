@@ -2,7 +2,7 @@ package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
-import com.bm.getin.dto.EventDTO;
+import com.bm.getin.dto.EventDto;
 import com.bm.getin.dto.EventRequest;
 import com.bm.getin.dto.EventResponse;
 import com.bm.getin.service.EventService;
@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -332,8 +331,8 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.message").value(containsString(ErrorCode.VALIDATION_ERROR.getMessage())));
         then(eventService).shouldHaveNoInteractions();
     }
-    private EventDTO createEventDTO() {
-        return EventDTO.of(
+    private EventDto createEventDTO() {
+        return EventDto.of(
                 1L,
                 1L,
                 "오후 운동",
