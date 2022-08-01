@@ -1,7 +1,7 @@
 package com.bm.getin.controller.error;
 
 import com.bm.getin.constant.ErrorCode;
-import com.bm.getin.dto.APIErrorResponse;
+import com.bm.getin.dto.ApiErrorResponse;
 import com.bm.getin.exception.GeneralException;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice(annotations = {RestController.class, RepositoryRestController.class})
-public class APIExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -47,7 +47,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternal(Exception ex, ErrorCode errorCode, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return super.handleExceptionInternal(
                 ex,
-                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(ex)),
+                ApiErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(ex)),
                 headers,
                 status,
                 request

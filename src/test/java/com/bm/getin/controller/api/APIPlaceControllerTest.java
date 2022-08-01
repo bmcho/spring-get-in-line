@@ -2,7 +2,7 @@ package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.PlaceType;
-import com.bm.getin.dto.APIDataResponse;
+import com.bm.getin.dto.ApiDataResponse;
 import com.bm.getin.dto.PlaceRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
@@ -22,21 +22,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
-@DisplayName("API 컨트롤러 - 장소")
+@Disabled("Api 컨트롤러가 필요없는 상황이어서 비활성화")
+@DisplayName("Api 컨트롤러 - 장소")
 @WebMvcTest(ApiPlaceController.class)
-class APIPlaceControllerTest {
+class ApiPlaceControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
-    public APIPlaceControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
+    public ApiPlaceControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
         this.mvc = mvc;
         this.mapper = mapper;
     }
 
 
     @Test
-    @DisplayName("[API] [GET} 장소 리스트 조회 - 장소 리스트 데이터를 담은 표준 API 출력")
+    @DisplayName("[Api] [GET} 장소 리스트 조회 - 장소 리스트 데이터를 담은 표준 Api 출력")
     void givenNothing_whenRequestingPlaces_thenReturnPlacesInStandardResponse() throws Exception{
         // Given
         // When & Then
@@ -55,7 +55,7 @@ class APIPlaceControllerTest {
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
     }
 
-    @DisplayName("[API][POST] 장소 생성")
+    @DisplayName("[Api][POST] 장소 생성")
     @Test
     void givenPlace_whenCreatingAPlace_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
@@ -82,7 +82,7 @@ class APIPlaceControllerTest {
     }
 
     @Test
-    @DisplayName("[API] [GET] 단일 장소 조회 - 장소o")
+    @DisplayName("[Api] [GET] 단일 장소 조회 - 장소o")
     void givenPlaceId_whenRequestingPlace_thenReturnPlaceInStandardResponse() throws  Exception{
         int placeId = 1;
         mvc.perform(get("/api/places/"+ placeId))
@@ -101,7 +101,7 @@ class APIPlaceControllerTest {
     }
 
     @Test
-    @DisplayName("[API] [GET] 단일 장소 조회 - 장소x")
+    @DisplayName("[Api] [GET] 단일 장소 조회 - 장소x")
     void givenPlaceId_whenRequestingPlace_thenReturnEmptyInStandardResponse() throws  Exception{
         int placeId = 2;
         mvc.perform(get("/api/places/"+ placeId))
@@ -112,15 +112,15 @@ class APIPlaceControllerTest {
     }
 
     @PutMapping("/places/{placeId}")
-    public APIDataResponse<Void> modifyPlace(
+    public ApiDataResponse<Void> modifyPlace(
             @PathVariable Long placeId,
             @RequestBody PlaceRequest placeRequest
     ) {
-        return APIDataResponse.empty();
+        return ApiDataResponse.empty();
     }
 
     @DeleteMapping("/places/{placeId}")
-    public APIDataResponse<Void> removePlace(@PathVariable Long placeId) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<Void> removePlace(@PathVariable Long placeId) {
+        return ApiDataResponse.empty();
     }
 }

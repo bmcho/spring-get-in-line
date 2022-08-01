@@ -15,21 +15,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
-@DisplayName("API 컨트롤러 - 인증")
+@Disabled("Api 컨트롤러가 필요없는 상황이어서 비활성화")
+@DisplayName("Api 컨트롤러 - 인증")
 @WebMvcTest(ApiAuthController.class)
-class APIAuthControllerTest {
+class ApiAuthControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
 
-    public APIAuthControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
+    public ApiAuthControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
         this.mvc = mvc;
         this.mapper = mapper;
     }
 
     @Test
-    @DisplayName("[API][POST] 관리자 가입 - 정상 입력하면 회정 정보를 추가하고 안내메세지 리턴")
+    @DisplayName("[Api][POST] 관리자 가입 - 정상 입력하면 회정 정보를 추가하고 안내메세지 리턴")
     void givenAdminDetails_whenSigningUp_thenCreatesAdminAndReturns() throws Exception {
         // Given
         AdminRequest adminRequest = AdminRequest.of(
@@ -52,7 +52,7 @@ class APIAuthControllerTest {
     }
 
     @Test
-    @DisplayName("[API][POST] 로그인 - 존재하는 유저 정보로 인증요청하면 인증 통과")
+    @DisplayName("[Api][POST] 로그인 - 존재하는 유저 정보로 인증요청하면 인증 통과")
     void givenUsernameAndPassword_whenLoggingIn_thenCreatesAdminAndReturns() throws Exception {
         // Given
         LoginRequest loginRequest = LoginRequest.of(

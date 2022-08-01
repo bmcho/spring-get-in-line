@@ -1,7 +1,7 @@
 package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.PlaceType;
-import com.bm.getin.dto.APIDataResponse;
+import com.bm.getin.dto.ApiDataResponse;
 import com.bm.getin.dto.PlaceDto;
 import com.bm.getin.dto.PlaceRequest;
 import com.bm.getin.dto.PlaceResponse;
@@ -15,8 +15,8 @@ import java.util.List;
 public class ApiPlaceController {
 
     @GetMapping("/places")
-    public APIDataResponse<List<PlaceResponse>> getPlaces() {
-        return APIDataResponse.of(List.of(PlaceResponse.of(
+    public ApiDataResponse<List<PlaceResponse>> getPlaces() {
+        return ApiDataResponse.of(List.of(PlaceResponse.of(
                 PlaceType.COMMON,
                 "칼라배드민턴",
                 "서울시 강남구 강남대로 1234",
@@ -28,18 +28,18 @@ public class ApiPlaceController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/places")
-    public APIDataResponse<Void> createPlace(@RequestBody PlaceRequest placeRequest) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<Void> createPlace(@RequestBody PlaceRequest placeRequest) {
+        return ApiDataResponse.empty();
     }
 
     @GetMapping("/places/{placeId}")
-    public APIDataResponse<PlaceDto> getPlace(@PathVariable Integer placeId) {
+    public ApiDataResponse<PlaceDto> getPlace(@PathVariable Integer placeId) {
         if (placeId.equals(2)) {
-            return APIDataResponse.of(null);
+            return ApiDataResponse.of(null);
         }
 
 
-        return APIDataResponse.of(PlaceDto.of(
+        return ApiDataResponse.of(PlaceDto.of(
                 PlaceType.COMMON,
                 "칼라배드민턴",
                 "서울시 강남구 강남대로 1234",
@@ -50,15 +50,15 @@ public class ApiPlaceController {
     }
 
     @PutMapping("/places/{placeId}")
-    public APIDataResponse<Void> modifyPlace(
+    public ApiDataResponse<Void> modifyPlace(
             @PathVariable Long placeId,
             @RequestBody PlaceRequest placeRequest
     ) {
-        return APIDataResponse.empty();
+        return ApiDataResponse.empty();
     }
 
     @DeleteMapping("/places/{placeId}")
-    public APIDataResponse<Void> removePlace(@PathVariable Long placeId) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<Void> removePlace(@PathVariable Long placeId) {
+        return ApiDataResponse.empty();
     }
 }

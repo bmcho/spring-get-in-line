@@ -30,10 +30,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.containsString;
 
-@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
-@DisplayName("API 컨트롤러 - 이벤트")
+@Disabled("Api 컨트롤러가 필요없는 상황이어서 비활성화")
+@DisplayName("Api 컨트롤러 - 이벤트")
 @WebMvcTest(ApiEventController.class)
-class APIEventControllerTest {
+class ApiEventControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
@@ -41,13 +41,13 @@ class APIEventControllerTest {
     @MockBean
     private EventService eventService;
 
-    public APIEventControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
+    public ApiEventControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper mapper) {
         this.mvc = mvc;
         this.mapper = mapper;
     }
 
     @Test
-    @DisplayName("[API][GET] 이벤트 리스트 조회 + 검색 파라미터")
+    @DisplayName("[Api][GET] 이벤트 리스트 조회 + 검색 파라미터")
     void givenParams_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
         // Given
         given(eventService.getEvents(any(), any(), any(), any(), any()))
@@ -84,7 +84,7 @@ class APIEventControllerTest {
     }
 
     @Test
-    @DisplayName("[API][GET] 이벤트 리스트 조회 +잘못된 검색 파라미터")
+    @DisplayName("[Api][GET] 이벤트 리스트 조회 +잘못된 검색 파라미터")
     void givenWrongParams_whenRequestingEvents_thenReturnsFailedStandardResponse() throws Exception {
         // Given
         // When & Then
@@ -102,7 +102,7 @@ class APIEventControllerTest {
         then(eventService).shouldHaveNoMoreInteractions();
     }
 
-    @DisplayName("[API][POST] 이벤트 생성")
+    @DisplayName("[Api][POST] 이벤트 생성")
     @Test
     void givenEvent_whenCreatingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
@@ -135,7 +135,7 @@ class APIEventControllerTest {
         then(eventService).should().createEvent(any());
     }
 
-    @DisplayName("[API][POST] 이벤트 생성 - 잘못된 정보 입력")
+    @DisplayName("[Api][POST] 이벤트 생성 - 잘못된 정보 입력")
     @Test
     void givenWrongEvent_whenCreatingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
@@ -167,7 +167,7 @@ class APIEventControllerTest {
         then(eventService).shouldHaveNoInteractions();
     }
 
-    @DisplayName("[API][GET] 단일 이벤트 조회 - 이벤트 있는 경우, 이벤트 데이터를 담은 표준 API 출력")
+    @DisplayName("[Api][GET] 단일 이벤트 조회 - 이벤트 있는 경우, 이벤트 데이터를 담은 표준 Api 출력")
     @Test
     void givenEventId_whenRequestingExistentEvent_thenReturnsEventInStandardResponse() throws Exception {
         // Given
@@ -198,7 +198,7 @@ class APIEventControllerTest {
         then(eventService).should().getEvent(eventId);
     }
 
-    @DisplayName("[API][GET] 단일 이벤트 조회 - 이벤트 없는 경우, 빈 표준 API 출력")
+    @DisplayName("[Api][GET] 단일 이벤트 조회 - 이벤트 없는 경우, 빈 표준 Api 출력")
     @Test
     void givenEventId_whenRequestingNonexistentEvent_thenReturnsEmptyStandardResponse() throws Exception {
         // Given
@@ -216,7 +216,7 @@ class APIEventControllerTest {
         then(eventService).should().getEvent(eventId);
     }
 
-    @DisplayName("[API][GET] 단일 이벤트 조회 - 파라미터 잘못된 경우, 빈 표준 API 출력")
+    @DisplayName("[Api][GET] 단일 이벤트 조회 - 파라미터 잘못된 경우, 빈 표준 Api 출력")
     @Test
     void givenWrongEventId_whenRequestingNonexistentEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
@@ -232,7 +232,7 @@ class APIEventControllerTest {
         then(eventService).shouldHaveNoInteractions();
     }
 
-    @DisplayName("[API][PUT] 이벤트 변경")
+    @DisplayName("[Api][PUT] 이벤트 변경")
     @Test
     void givenEventIdAndInfo_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
@@ -266,7 +266,7 @@ class APIEventControllerTest {
         then(eventService).should().modifyEvent(eq(eventId), any());
     }
 
-    @DisplayName("[API][PUT] 이벤트 변경 - 잘못된 입력")
+    @DisplayName("[Api][PUT] 이벤트 변경 - 잘못된 입력")
     @Test
     void givenWrongEventIdAndInfo_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
@@ -297,7 +297,7 @@ class APIEventControllerTest {
         then(eventService).shouldHaveNoInteractions();
     }
 
-    @DisplayName("[API][DELETE] 이벤트 삭제")
+    @DisplayName("[Api][DELETE] 이벤트 삭제")
     @Test
     void givenEventId_whenDeletingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
@@ -316,7 +316,7 @@ class APIEventControllerTest {
         then(eventService).should().removeEvent(eq(eventId));
     }
 
-    @DisplayName("[API][DELETE] 이벤트 삭제 - 잘못된 입력")
+    @DisplayName("[Api][DELETE] 이벤트 삭제 - 잘못된 입력")
     @Test
     void givenWrongEventId_whenDeletingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given

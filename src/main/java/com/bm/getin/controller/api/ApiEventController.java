@@ -1,7 +1,7 @@
 package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.EventStatus;
-import com.bm.getin.dto.APIDataResponse;
+import com.bm.getin.dto.ApiDataResponse;
 import com.bm.getin.dto.EventRequest;
 import com.bm.getin.dto.EventResponse;
 import com.bm.getin.service.EventService;
@@ -25,7 +25,7 @@ public class ApiEventController {
     private final EventService eventService;
 
     @GetMapping("/events")
-    public APIDataResponse<List<EventResponse>> getEvents(
+    public ApiDataResponse<List<EventResponse>> getEvents(
             @Positive Long placeId,
             @Size(min = 2) String eventName,
             EventStatus eventStatus,
@@ -36,44 +36,44 @@ public class ApiEventController {
                         placeId, eventName, eventStatus, eventStartDateTime, eventEndDateTime)
                 .stream().map(EventResponse::from).toList();
 
-        return APIDataResponse.of(eventResponses);
+        return ApiDataResponse.of(eventResponses);
     }
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public APIDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
+    public ApiDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
         boolean result = eventService.createEvent(eventRequest.ToDto());
-        return APIDataResponse.of(Boolean.toString(result));
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
     @GetMapping("/events/{eventId}")
-    public APIDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
+    public ApiDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
         EventResponse eventResponse = EventResponse.from(eventService.getEvent(eventId).orElse(null));
 
-        return APIDataResponse.of(eventResponse);
+        return ApiDataResponse.of(eventResponse);
     }
 
     @PutMapping("/events/{eventId}")
-    public APIDataResponse<String> modifyEvent(@Positive @PathVariable Long eventId, @Valid @RequestBody EventRequest eventRequest) {
+    public ApiDataResponse<String> modifyEvent(@Positive @PathVariable Long eventId, @Valid @RequestBody EventRequest eventRequest) {
         boolean result = eventService.modifyEvent(eventId, eventRequest.ToDto());
-        return APIDataResponse.of(Boolean.toString(result));
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
     @DeleteMapping("/events/{eventId}")
-    public APIDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
+    public ApiDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
         boolean result = eventService.removeEvent(eventId);
-        return APIDataResponse.of(Boolean.toString(result));
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
 //    @ExceptionHandler
-//    public ResponseEntity<APIErrorResponse> general(GeneralException e) {
+//    public ResponseEntity<ApiErrorResponse> general(GeneralException e) {
 //        ErrorCode errorCode = e.getErrorCode();
 //        HttpStatus status = errorCode.isClientSideError() ?
 //                HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
 //
 //        return ResponseEntity
 //                .status(status)
-//                .body(APIErrorResponse.of(
+//                .body(ApiErrorResponse.of(
 //                        false, errorCode, errorCode.getMessage(e)
 //                ));
 //    }
