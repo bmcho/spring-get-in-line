@@ -18,7 +18,6 @@ import javax.validation.ConstraintViolationException;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("핸들러 - Api 에러 처리")
 class ApiExceptionHandlerTest {

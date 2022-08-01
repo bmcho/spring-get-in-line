@@ -28,7 +28,7 @@ public class BaseExceptionHandler {
     }
 
     @ExceptionHandler
-    public ModelAndView exceptions(Exception e) {
+    public ModelAndView exception(Exception e) {
 
         ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
