@@ -17,17 +17,13 @@ public class BaseExceptionHandler {
 
         ErrorCode errorCode = e.getErrorCode();
 
-        HttpStatus status = errorCode.isClientSideError() ?
-                HttpStatus.BAD_REQUEST :
-                HttpStatus.INTERNAL_SERVER_ERROR;
-
         return new ModelAndView("error",
                 Map.of(
-                        "statusCode", status.value(),
+                        "statusCode", errorCode.getHttpStatus().value(),
                         "errorCode", errorCode,
                         "message", errorCode.getMessage()
                 ),
-                status
+                errorCode.getHttpStatus()
         );
     }
 
