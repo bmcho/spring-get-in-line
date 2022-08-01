@@ -1,18 +1,13 @@
 package com.bm.getin.controller.api;
 
-import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.dto.APIDataResponse;
-import com.bm.getin.dto.APIErrorResponse;
 import com.bm.getin.dto.EventRequest;
 import com.bm.getin.dto.EventResponse;
-import com.bm.getin.exception.GeneralException;
 import com.bm.getin.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 //@RestController
 //@RequestMapping("/api")
-public class APIEventController {
+public class ApiEventController {
 
     private final EventService eventService;
 

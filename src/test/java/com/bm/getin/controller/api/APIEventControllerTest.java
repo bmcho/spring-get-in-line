@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.containsString;
 
 @Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
 @DisplayName("API 컨트롤러 - 이벤트")
-@WebMvcTest(APIEventController.class)
+@WebMvcTest(ApiEventController.class)
 class APIEventControllerTest {
 
     private final MockMvc mvc;

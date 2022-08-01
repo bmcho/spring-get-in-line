@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 //@RestController
 //@RequestMapping("/api")
-public class APIAuthController {
+public class ApiAuthController {
 
     @PostMapping("/sign-up")
     public APIDataResponse<String> sighUp(@RequestBody AdminRequest adminRequest) {

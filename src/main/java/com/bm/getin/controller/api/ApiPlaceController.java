@@ -12,7 +12,7 @@ import java.util.List;
 
     //@RestController
     //@RequestMapping("/api")
-public class APIPlaceController {
+public class ApiPlaceController {
 
     @GetMapping("/places")
     public APIDataResponse<List<PlaceResponse>> getPlaces() {
