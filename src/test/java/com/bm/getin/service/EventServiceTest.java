@@ -2,10 +2,13 @@ package com.bm.getin.service;
 
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
+import com.bm.getin.constant.PlaceType;
 import com.bm.getin.domain.Event;
+import com.bm.getin.domain.Place;
 import com.bm.getin.dto.EventDto;
 import com.bm.getin.exception.GeneralException;
 import com.bm.getin.repository.EventRepository;
+import com.bm.getin.repository.PlaceRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +35,7 @@ class EventServiceTest {
 
     @InjectMocks private EventService sut;
     @Mock private EventRepository eventRepository;
+    @Mock private PlaceRepository placeRepository;
 
     @DisplayName("이벤트를 검색하면, 결과를 출력하여 보여준다.")
     @Test
@@ -39,8 +43,8 @@ class EventServiceTest {
         // Given
         given(eventRepository.findAll(any(Predicate.class)))
                 .willReturn(List.of(
-                        createEvent(1L, "오전 운동", true),
-                        createEvent(1L, "오후 운동", false)
+                        createEvent("오전 운동", true),
+                        createEvent("오후 운동", false)
                 ));
 
         // When
@@ -73,7 +77,7 @@ class EventServiceTest {
     void givenEventId_whenSearchingExistingEvent_thenReturnsEvent() {
         // Given
         long eventId = 1L;
-        Event event = createEvent(1L, "오전 운동", true);
+        Event event = createEvent("오전 운동", true);
         given(eventRepository.findById(eventId)).willReturn(Optional.of(event));
 
         // When
@@ -120,7 +124,8 @@ class EventServiceTest {
     @Test
     void givenEvent_whenCreating_thenCreatesEventAndReturnsTrue() {
         // Given
-        EventDto eventDto = EventDto.of(createEvent(1L, "오후 운동", false));
+        EventDto eventDto = EventDto.of(createEvent("오후 운동", false));
+        given(placeRepository.findById(eventDto.placeId())).willReturn(Optional.of(createPlace()));
         given(eventRepository.save(any(Event.class))).willReturn(any());
 
         // When
@@ -128,6 +133,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isTrue();
+        then(placeRepository).should().findById(eventDto.placeId());
         then(eventRepository).should().save(any(Event.class));
     }
 
@@ -141,6 +147,25 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isFalse();
+        then(placeRepository).shouldHaveNoInteractions();
+        then(eventRepository).shouldHaveNoInteractions();
+    }
+
+    @DisplayName("이벤트 생성 중 장소 정보가 틀리거나 없으면, 줄서기 프로젝트 기본 에러로 전환하여 예외 던진다")
+    @Test
+    void givenWrongPlaceId_whenCreating_thenThrowsGeneralException() {
+        // Given
+        Event event = createEvent(null, false);
+        given(placeRepository.findById(event.getPlace().getId())).willReturn(Optional.empty());
+
+        // When
+        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDto.of(event)));
+
+        // Then
+        assertThat(thrown)
+                .isInstanceOf(GeneralException.class)
+                .hasMessageContaining(ErrorCode.DATA_ACCESS_ERROR.getMessage());
+        then(placeRepository).should().findById(event.getPlace().getId());
         then(eventRepository).shouldHaveNoInteractions();
     }
 
@@ -148,8 +173,9 @@ class EventServiceTest {
     @Test
     void givenDataRelatedException_whenCreating_thenThrowsGeneralException() {
         // Given
-        Event event = createEvent(0L, null, false);
+        Event event = createEvent(null, false);
         RuntimeException e = new RuntimeException("This is test.");
+        given(placeRepository.findById(event.getPlace().getId())).willReturn(Optional.of(createPlace()));
         given(eventRepository.save(any())).willThrow(e);
 
         // When
@@ -159,6 +185,7 @@ class EventServiceTest {
         assertThat(thrown)
                 .isInstanceOf(GeneralException.class)
                 .hasMessageContaining(ErrorCode.DATA_ACCESS_ERROR.getMessage());
+        then(placeRepository).should().findById(event.getPlace().getId());
         then(eventRepository).should().save(any());
     }
 
@@ -167,8 +194,8 @@ class EventServiceTest {
     void givenEventIdAndItsInfo_whenModifying_thenModifiesEventAndReturnsTrue() {
         // Given
         long eventId = 1L;
-        Event originalEvent = createEvent(1L, "오후 운동", false);
-        Event changedEvent = createEvent(1L, "오전 운동", true);
+        Event originalEvent = createEvent("오후 운동", false);
+        Event changedEvent = createEvent("오전 운동", true);
         given(eventRepository.findById(eventId)).willReturn(Optional.of(originalEvent));
         given(eventRepository.save(changedEvent)).willReturn(changedEvent);
 
@@ -189,7 +216,7 @@ class EventServiceTest {
     @Test
     void givenNoEventId_whenModifying_thenAbortModifyingAndReturnsFalse() {
         // Given
-        Event event = createEvent(1L, "오후 운동", false);
+        Event event = createEvent("오후 운동", false);
 
         // When
         boolean result = sut.modifyEvent(null, EventDto.of(event));
@@ -218,8 +245,8 @@ class EventServiceTest {
     void givenDataRelatedException_whenModifying_thenThrowsGeneralException() {
         // Given
         long eventId = 1L;
-        Event originalEvent = createEvent(1L, "오후 운동", false);
-        Event wrongEvent = createEvent(0L, null, false);
+        Event originalEvent = createEvent("오후 운동", false);
+        Event wrongEvent = createEvent(null, false);
         RuntimeException e = new RuntimeException("This is test.");
         given(eventRepository.findById(eventId)).willReturn(Optional.of(originalEvent));
         given(eventRepository.save(any())).willThrow(e);
@@ -282,13 +309,13 @@ class EventServiceTest {
     }
 
 
-    private Event createEvent(long placeId, String eventName, boolean isMorning) {
+    private Event createEvent(String eventName, boolean isMorning) {
         String hourStart = isMorning ? "09" : "13";
         String hourEnd = isMorning ? "12" : "16";
 
         return createEvent(
                 1L,
-                placeId,
+                1L,
                 eventName,
                 EventStatus.OPENED,
                 LocalDateTime.parse("2021-01-01T%s:00:00".formatted(hourStart)),
@@ -305,7 +332,7 @@ class EventServiceTest {
             LocalDateTime eventEndDateTime
     ) {
         Event event = Event.of(
-                placeId,
+                createPlace(placeId),
                 eventName,
                 eventStatus,
                 eventStartDateTime,
@@ -318,4 +345,16 @@ class EventServiceTest {
 
         return event;
     }
+
+    private Place createPlace() {
+        return createPlace(1L);
+    }
+
+    private Place createPlace(long id) {
+        Place place = Place.of(PlaceType.COMMON, "test place", "test address", "010-1234-1234", 10, null);
+        ReflectionTestUtils.setField(place, "id", id);
+
+        return place;
+    }
+
 }

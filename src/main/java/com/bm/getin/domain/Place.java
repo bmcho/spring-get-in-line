@@ -11,11 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString
-@EqualsAndHashCode
 @Table(indexes = {
         @Index(columnList = "placeName"),
         @Index(columnList = "address"),
@@ -52,10 +53,13 @@ public class Place {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer capacity;
 
-
     @Setter
     private String memo;
 
+    @ToString.Exclude
+    @OrderBy("id")
+    @OneToMany(mappedBy = "place")
+    private final Set<Event> events = new LinkedHashSet<>();
 
     @Column(nullable = false, insertable = false, updatable = false,
             columnDefinition = "datetime default CURRENT_TIMESTAMP")

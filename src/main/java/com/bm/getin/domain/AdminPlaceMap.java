@@ -31,12 +31,12 @@ public class AdminPlaceMap {
     private Integer id;
 
     @Setter
-    @Column(nullable = false)
-    private Long adminId;
+    @ManyToOne(optional = false)
+    private Admin admin;
 
     @Setter
-    @Column(nullable = false)
-    private Long placeId;
+    @ManyToOne(optional = false)
+    private Place place;
 
     @Column(nullable = false, insertable = false, updatable = false,
             columnDefinition = "datetime default CURRENT_TIMESTAMP")
@@ -51,13 +51,13 @@ public class AdminPlaceMap {
     protected AdminPlaceMap() {
     }
 
-    protected AdminPlaceMap(Long adminId, Long placeId) {
-        this.adminId = adminId;
-        this.placeId = placeId;
+    protected AdminPlaceMap(Admin admin, Place place) {
+        this.admin = admin;
+        this.place = place;
     }
 
-    public static AdminPlaceMap of(Long adminId, Long placeId) {
-        return new AdminPlaceMap(adminId, placeId);
+    public static AdminPlaceMap of(Admin admin, Place place) {
+        return new AdminPlaceMap(admin, place);
     }
 
     @Override
