@@ -49,6 +49,7 @@ public class Admin {
     private String memo;
 
     @ToString.Exclude
+    @OrderBy("id")
     @OneToMany(mappedBy = "admin")
     private final Set<AdminPlaceMap> adminPlaceMaps = new LinkedHashSet<>();
 
