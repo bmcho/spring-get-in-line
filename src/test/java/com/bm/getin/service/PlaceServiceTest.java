@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,10 +29,8 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class PlaceServiceTest {
 
-    @InjectMocks
-    private PlaceService sut;
-    @Mock
-    private PlaceRepository placeRepository;
+    @InjectMocks private PlaceService sut;
+    @Mock private PlaceRepository placeRepository;
 
     @DisplayName("장소를 검색하면, 결과를 출력하여 보여준다.")
     @Test
@@ -121,14 +120,14 @@ class PlaceServiceTest {
     void givenPlace_whenCreating_thenCreatesPlaceAndReturnsTrue() {
         // Given
         Place place = createPlace(PlaceType.SPORTS, "체육관");
-        given(placeRepository.save(place)).willReturn(place);
+        given(placeRepository.save(any(Place.class))).willReturn(place);
 
         // When
         boolean result = sut.createPlace(PlaceDto.of(place));
 
         // Then
         assertThat(result).isTrue();
-        then(placeRepository).should().save(place);
+        then(placeRepository).should().save(any(Place.class));
     }
 
     @DisplayName("장소 정보를 주지 않으면, 생성 중단하고 결과를 false 로 보여준다.")
@@ -278,11 +277,16 @@ class PlaceServiceTest {
     }
 
 
+    private Place createPlace(PlaceType placeType, String placeName) {
+        return createPlace(1L, placeType, placeName);
+    }
+
     private Place createPlace(
+            long id,
             PlaceType placeType,
             String placeName
     ) {
-        return Place.of(
+        Place place = Place.of(
                 placeType,
                 placeName,
                 "주소 테스트",
@@ -290,5 +294,9 @@ class PlaceServiceTest {
                 24,
                 "마스크 꼭 착용하세요"
         );
+        ReflectionTestUtils.setField(place, "id", id);
+
+        return place;
     }
+
 }

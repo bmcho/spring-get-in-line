@@ -1,5 +1,3 @@
--- noinspection SqlNoDataSourceInspectionForFile
--- noinspection SqlResolveForFile
 
 insert into `place` (`place_type`, `place_name`, `address`, `phone_number`, `capacity`, `memo`)
 values
