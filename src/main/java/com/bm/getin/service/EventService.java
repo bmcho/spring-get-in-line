@@ -61,7 +61,7 @@ public class EventService {
                 return false;
             }
 
-            Place place = placeRepository.findById(eventDto.placeId())
+            Place place = placeRepository.findById(eventDto.placeDto().id())
                     .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
 
             eventRepository.save(eventDto.toEntity(place));
