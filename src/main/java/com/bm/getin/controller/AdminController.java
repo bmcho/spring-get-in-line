@@ -34,15 +34,19 @@ public class AdminController {
     }
 
     @GetMapping("/places/{placesId}")
-    public ModelAndView adminPlacesDetail(@PathVariable Integer placesId) {
+    public ModelAndView adminPlacesDetail(@PathVariable Long placesId) {
         Map<String, Object> map = new HashMap<>();
         map.put("place", PlaceDto.of(
+
+                placesId,
                 PlaceType.COMMON,
                 "즐거운배드민턴장",
                 "서울시 강남구 강남대로 1",
                 "010-1234-1234",
                 30,
-                "신장개업"
+                "신장개업",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
 
         return new ModelAndView("admin/place-detail", map);

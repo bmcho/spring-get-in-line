@@ -8,6 +8,7 @@ import com.bm.getin.dto.PlaceResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
     //@RestController
@@ -17,6 +18,7 @@ public class ApiPlaceController {
     @GetMapping("/places")
     public ApiDataResponse<List<PlaceResponse>> getPlaces() {
         return ApiDataResponse.of(List.of(PlaceResponse.of(
+                1L,
                 PlaceType.COMMON,
                 "칼라배드민턴",
                 "서울시 강남구 강남대로 1234",
@@ -33,19 +35,22 @@ public class ApiPlaceController {
     }
 
     @GetMapping("/places/{placeId}")
-    public ApiDataResponse<PlaceDto> getPlace(@PathVariable Integer placeId) {
+    public ApiDataResponse<PlaceDto> getPlace(@PathVariable Long placeId) {
         if (placeId.equals(2)) {
             return ApiDataResponse.of(null);
         }
 
 
         return ApiDataResponse.of(PlaceDto.of(
+                placeId,
                 PlaceType.COMMON,
                 "칼라배드민턴",
                 "서울시 강남구 강남대로 1234",
                 "010-1234-5678",
                 30,
-                "신장개업"
+                "신장개업",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
     }
 
