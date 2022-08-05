@@ -26,7 +26,7 @@ public class EventRepositoryCustomImpl
     }
 
     @Override
-    public Page<EventViewResponse> findEventPageBySearchParams(
+    public Page<EventViewResponse> findEventViewPageBySearchParams(
             String placeName,
             String eventName,
             EventStatus eventStatus,

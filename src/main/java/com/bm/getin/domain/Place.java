@@ -56,11 +56,6 @@ public class Place {
     @Setter
     private String memo;
 
-    @ToString.Exclude
-    @OrderBy("id")
-    @OneToMany(mappedBy = "place")
-    private final Set<Event> events = new LinkedHashSet<>();
-
     @Column(nullable = false, insertable = false, updatable = false,
             columnDefinition = "datetime default CURRENT_TIMESTAMP")
     @CreatedDate
@@ -72,8 +67,17 @@ public class Place {
     private LocalDateTime modifiedAt;
 
 
-    protected Place() {
-    }
+    @ToString.Exclude
+    @OrderBy("id")
+    @OneToMany(mappedBy = "place")
+    private final Set<Event> events = new LinkedHashSet<>();
+
+    @ToString.Exclude
+    @OrderBy("id")
+    @OneToMany(mappedBy = "place")
+    private final Set<AdminPlaceMap> adminPlaceMaps = new LinkedHashSet<>();
+
+    protected Place() {}
 
     protected Place(
             PlaceType placeType,
@@ -102,6 +106,7 @@ public class Place {
         return new Place(placeType, placeName, address, phoneNumber, capacity, memo);
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -113,4 +118,5 @@ public class Place {
     public int hashCode() {
         return Objects.hash(placeName, address, phoneNumber, createdAt, modifiedAt);
     }
+
 }
