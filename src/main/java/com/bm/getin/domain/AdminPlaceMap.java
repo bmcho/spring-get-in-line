@@ -16,8 +16,6 @@ import java.util.Objects;
 @Getter
 @ToString
 @Table(indexes = {
-        @Index(columnList = "adminId"),
-        @Index(columnList = "placeId"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
