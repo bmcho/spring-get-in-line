@@ -1,11 +1,14 @@
 package com.bm.getin.controller.api;
 
 import com.bm.getin.constant.EventStatus;
+import com.bm.getin.constant.PlaceType;
 import com.bm.getin.dto.ApiDataResponse;
 import com.bm.getin.dto.EventRequest;
 import com.bm.getin.dto.EventResponse;
+import com.bm.getin.dto.PlaceDto;
 import com.bm.getin.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +35,27 @@ public class ApiEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
     ) {
-        List<EventResponse> eventResponses = eventService.getEvents(
-                        placeId, eventName, eventStatus, eventStartDateTime, eventEndDateTime)
-                .stream().map(EventResponse::from).toList();
-
-        return ApiDataResponse.of(eventResponses);
+        return ApiDataResponse.of(List.of(EventResponse.of(
+                1L,
+                PlaceDto.of(
+                        1L,
+                        PlaceType.SPORTS,
+                        "배드민턴장",
+                        "서울시 가나구 다라동",
+                        "010-1111-2222",
+                        0,
+                        null,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                0,
+                24,
+                "마스크 꼭 착용하세요"
+        )));
     }
 
     @PostMapping("/events")

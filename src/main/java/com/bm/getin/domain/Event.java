@@ -14,7 +14,6 @@ import java.util.Objects;
 @Getter
 @ToString
 @Table(indexes = {
-        @Index(columnList = "placeId"),
         @Index(columnList = "eventName"),
         @Index(columnList = "eventStartDatetime"),
         @Index(columnList = "eventEndDatetime"),
