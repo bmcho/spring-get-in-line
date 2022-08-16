@@ -2,22 +2,39 @@ package com.bm.getin.controller;
 
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
+import com.bm.getin.domain.Place;
+import com.bm.getin.dto.EventDto;
+import com.bm.getin.dto.PlaceDto;
+import com.bm.getin.service.EventService;
+import com.bm.getin.service.PlaceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 어드민")
 @WebMvcTest(AdminController.class)
 class AdminControllerTest {
     private final MockMvc mvc;
+    @MockBean
+    private EventService eventService;
+    @MockBean
+    private PlaceService placeService;
 
     public AdminControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
@@ -25,9 +42,9 @@ class AdminControllerTest {
 
     @DisplayName("[view][GET] 어드민 페이지 - 장소 리스트 뷰")
     @Test
-    void givenQueryParams_whenRequestingAdminPlacePage_thenReturnsAdminPlacesPage() throws Exception {
+    void givenQueryParams_whenRequestingAdminPlacesPage_thenReturnsAdminPlacesPage() throws Exception {
         // Given
-
+        given(placeService.getPlaces(any())).willReturn(List.of());
 
         // When & Given
         mvc.perform(
@@ -38,7 +55,12 @@ class AdminControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("admin/places"));
+                .andExpect(view().name("admin/places"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("places"))
+                .andExpect(model().attributeExists("placeType"));
+
+        then(placeService).should().getPlaces(any());
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 장소 세부 정보 뷰")
@@ -46,17 +68,44 @@ class AdminControllerTest {
     void givenPlaceId_whenRequestingAdminPlaceDetailPage_thenReturnsAdminPlaceDetailPage() throws Exception {
         // Given
         long placeId = 1L;
+        given(placeService.getPlace(placeId)).willReturn(Optional.of(
+                PlaceDto.of(placeId, null, null, null, null, null, null, null, null)
+        ));
 
         // When & Then
         mvc.perform(get("/admin/places/" + placeId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("admin/place-detail"));
+                .andExpect(view().name("admin/place-detail"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("place"))
+                .andExpect(model().attributeExists("placeType"));
+
+        then(placeService).should().getPlace(placeId);
+    }
+
+    @DisplayName("[view][GET] 어드민 페이지 - 장소 세부 정보 뷰, 데이터 없음")
+    @Test
+    void givenNonexistentPlaceId_whenRequestingAdminPlaceDetailPage_thenReturnsErrorPage() throws Exception {
+        // Given
+        long placeId = 1L;
+        given(placeService.getPlace(placeId)).willReturn(Optional.empty());
+
+        // When
+        mvc.perform(get("/admin/places/" + placeId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("error"));
+
+        // Then
+        then(placeService).should().getPlace(placeId);
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 이벤트 리스트 뷰")
     @Test
     void givenQueryParams_whenRequestingAdminEventsPage_thenReturnsAdminEventsPage() throws Exception {
+        // Given
+        given(eventService.getEvents(any())).willReturn(List.of());
         // When & Then
         mvc.perform(
                         get("/admin/events")
@@ -70,7 +119,12 @@ class AdminControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("admin/events"));
+                .andExpect(view().name("admin/events"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("events"))
+                .andExpect(model().attributeExists("eventStatus"));
+
+        then(eventService).should().getEvents(any());
     }
 
 
@@ -79,12 +133,34 @@ class AdminControllerTest {
     void givenEventId_whenRequestingAdminEventDetailPage_thenReturnsAdminEventDetailPage() throws Exception {
         // Given
         long eventId = 1L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(
+                EventDto.of(eventId, null, null, null, null, null, null, null, null, null, null)
+        ));
 
         // When & Then
         mvc.perform(get("/admin/events/" + eventId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("admin/event-detail"));
+                .andExpect(view().name("admin/event-detail"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("event"))
+                .andExpect(model().attributeExists("eventStatus"));
+
+        then(eventService).should().getEvent(eventId);
     }
 
+    @DisplayName("[view][GET] 어드민 페이지 - 이벤트 세부 정보 뷰, 데이터 없음")
+    @Test
+    void givenNonexistentEventId_whenRequestingAdminEventDetailPage_thenReturnsErrorPage() throws Exception {
+        // Given
+        long eventId = 1L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.empty());
+
+        // When & Then
+        mvc.perform(get("/admin/events/" + eventId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("error"));
+        then(eventService).should().getEvent(eventId);
+    }
 }
