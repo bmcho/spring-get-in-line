@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public record EventResponse(
         Long id,
-        PlaceDto placeDto,
+        PlaceDto place,
         String eventName,
         EventStatus eventStatus,
         LocalDateTime eventStartDatetime,
@@ -54,5 +54,9 @@ public record EventResponse(
                 eventDto.capacity(),
                 eventDto.memo()
         );
+    }
+
+    public String getPlaceName() {
+        return this.place().placeName();
     }
 }
