@@ -71,10 +71,7 @@ public class EventService {
             if (eventDto == null) {
                 return false;
             }
-
-            Place place = placeRepository.findById(eventDto.placeDto().id())
-                    .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
-
+            Place place = placeRepository.getReferenceById(eventDto.placeDto().id());
             eventRepository.save(eventDto.toEntity(place));
             return true;
         } catch (Exception e) {

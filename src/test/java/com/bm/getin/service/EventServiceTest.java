@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -125,7 +126,7 @@ class EventServiceTest {
     void givenEvent_whenCreating_thenCreatesEventAndReturnsTrue() {
         // Given
         EventDto eventDto = EventDto.of(createEvent("오후 운동", false));
-        given(placeRepository.findById(eventDto.placeDto().id())).willReturn(Optional.of(createPlace()));
+        given(placeRepository.getReferenceById(eventDto.placeDto().id())).willReturn(createPlace());
         given(eventRepository.save(any(Event.class))).willReturn(any());
 
         // When
@@ -133,7 +134,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isTrue();
-        then(placeRepository).should().findById(eventDto.placeDto().id());
+        then(placeRepository).should().getReferenceById(eventDto.placeDto().id());
         then(eventRepository).should().save(any(Event.class));
     }
 
@@ -155,18 +156,19 @@ class EventServiceTest {
     @Test
     void givenWrongPlaceId_whenCreating_thenThrowsGeneralException() {
         // Given
-        Event event = createEvent(null, false);
-        given(placeRepository.findById(event.getPlace().getId())).willReturn(Optional.empty());
+        EventDto eventDto = EventDto.of(createEvent("오후 운동", false));
+        given(placeRepository.getReferenceById(eventDto.placeDto().id())).willReturn(null);
+        given(eventRepository.save(any(Event.class))).willThrow(EntityNotFoundException.class);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDto.of(event)));
+        Throwable thrown = catchThrowable(() -> sut.createEvent(eventDto));
 
         // Then
         assertThat(thrown)
                 .isInstanceOf(GeneralException.class)
                 .hasMessageContaining(ErrorCode.DATA_ACCESS_ERROR.getMessage());
-        then(placeRepository).should().findById(event.getPlace().getId());
-        then(eventRepository).shouldHaveNoInteractions();
+        then(placeRepository).should().getReferenceById(eventDto.placeDto().id());
+        then(eventRepository).should().save(any(Event.class));
     }
 
     @DisplayName("이벤트 생성 중 데이터 예외가 발생하면, 줄서기 프로젝트 기본 에러로 전환하여 예외 던진다")
@@ -175,7 +177,7 @@ class EventServiceTest {
         // Given
         Event event = createEvent(null, false);
         RuntimeException e = new RuntimeException("This is test.");
-        given(placeRepository.findById(event.getPlace().getId())).willReturn(Optional.of(createPlace()));
+        given(placeRepository.getReferenceById(event.getPlace().getId())).willReturn(null);
         given(eventRepository.save(any())).willThrow(e);
 
         // When
@@ -185,7 +187,7 @@ class EventServiceTest {
         assertThat(thrown)
                 .isInstanceOf(GeneralException.class)
                 .hasMessageContaining(ErrorCode.DATA_ACCESS_ERROR.getMessage());
-        then(placeRepository).should().findById(event.getPlace().getId());
+        then(placeRepository).should().getReferenceById(event.getPlace().getId());
         then(eventRepository).should().save(any());
     }
 
