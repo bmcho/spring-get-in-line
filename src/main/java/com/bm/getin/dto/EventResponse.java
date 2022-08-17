@@ -56,6 +56,10 @@ public record EventResponse(
         );
     }
 
+    public static EventResponse empty(PlaceDto placeDto) {
+        return EventResponse.of(null, placeDto, null, null, null, null, null, null, null);
+    }
+
     public String getPlaceName() {
         return this.place().placeName();
     }

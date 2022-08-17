@@ -1,28 +1,32 @@
 package com.bm.getin.controller;
 
+import com.bm.getin.constant.AdminOperationStatus;
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
 import com.bm.getin.domain.Event;
 import com.bm.getin.domain.Place;
-import com.bm.getin.dto.EventResponse;
-import com.bm.getin.dto.PlaceResponse;
+import com.bm.getin.dto.*;
 import com.bm.getin.exception.GeneralException;
 import com.bm.getin.service.EventService;
 import com.bm.getin.service.PlaceService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/admin")
 @Controller
 public class AdminController {
@@ -39,7 +43,7 @@ public class AdminController {
 
         return new ModelAndView("admin/places", Map.of(
                 "places", places,
-                "placeType", PlaceType.values()
+                "placeTypeOption", PlaceType.values()
         ));
     }
 
@@ -51,12 +55,64 @@ public class AdminController {
 
         return new ModelAndView("admin/place-detail", Map.of(
                 "place", place,
-                "placeType", PlaceType.values()
+                "placeTypeOption", PlaceType.values()
         ));
     }
 
+    @GetMapping("/places/new")
+    public String newPlace(Model model) {
+        model.addAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        model.addAttribute("placeTypeOption", PlaceType.values());
+
+        return "admin/place-detail";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @PostMapping("/places")
+    public String createPlace(
+            @Valid PlaceRequest placeRequest,
+            RedirectAttributes redirectAttributes
+    ) {
+        placeService.createPlace(placeRequest.toDto());
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places");
+
+        return "redirect:/admin/confirm";
+    }
+
+    @GetMapping("/places/{placeId}/newEvent")
+    public String newEvent(@PathVariable Long placeId, Model model) {
+        EventResponse event = placeService.getPlace(placeId)
+                .map(EventResponse::empty)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+
+        model.addAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        model.addAttribute("eventStatusOption", EventStatus.values());
+        model.addAttribute("event", event);
+
+        return "admin/event-detail";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @PostMapping("/places/{placeId}/events")
+    public String createEvent(
+            @Valid EventRequest eventRequest,
+            @PathVariable Long placeId,
+            RedirectAttributes redirectAttributes
+    ) {
+        eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/plcaes/" + placeId);
+
+        return "redirect:/admin/confirm";
+    }
+
+
     @GetMapping("/events")
     public ModelAndView adminEvents(@QuerydslPredicate(root = Event.class) Predicate predicate) {
+
         List<EventResponse> events = eventService.getEvents(predicate)
                 .stream()
                 .map(EventResponse::from)
@@ -78,5 +134,14 @@ public class AdminController {
                 "event", event,
                 "eventStatus", EventStatus.values()
         ));
+    }
+
+    @GetMapping("/confirm")
+    public String confirm(Model model) {
+        if (!model.containsAttribute("redirectUtl")) {
+            throw new GeneralException(ErrorCode.BAD_REQUEST);
+        }
+
+        return "admin/confirm";
     }
 }

@@ -19,8 +19,16 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//@Validated
+/**
+ * Spring Data REST 로 API 를 만들어서 당장 필요가 없어진 컨트롤러.
+ * 우선 deprecated 하고, 향후 사용 방안을 고민해 본다.
+ * 필요에 따라서는 다시 살릴 수도 있음
+ *
+ * @deprecated 0.1.2
+ */
+@Deprecated
 @RequiredArgsConstructor
+//@Validated
 //@RestController
 //@RequestMapping("/api")
 public class ApiEventController {
@@ -58,10 +66,13 @@ public class ApiEventController {
         )));
     }
 
-    @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
-        boolean result = eventService.createEvent(eventRequest.ToDto());
+    @PostMapping("/place/{placeId}/events")
+    public ApiDataResponse<String> createEvent(
+            @Valid @RequestBody EventRequest eventRequest,
+            @PathVariable Long placeId
+    ) {
+        boolean result = eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
         return ApiDataResponse.of(Boolean.toString(result));
     }
 
@@ -74,7 +85,7 @@ public class ApiEventController {
 
     @PutMapping("/events/{eventId}")
     public ApiDataResponse<String> modifyEvent(@Positive @PathVariable Long eventId, @Valid @RequestBody EventRequest eventRequest) {
-        boolean result = eventService.modifyEvent(eventId, eventRequest.ToDto());
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDto(null));
         return ApiDataResponse.of(Boolean.toString(result));
     }
 
