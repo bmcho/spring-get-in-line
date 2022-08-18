@@ -4,8 +4,6 @@ import com.bm.getin.constant.AdminOperationStatus;
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
-import com.bm.getin.domain.Admin;
-import com.bm.getin.domain.Event;
 import com.bm.getin.domain.Place;
 import com.bm.getin.dto.*;
 import com.bm.getin.exception.GeneralException;
@@ -84,6 +82,21 @@ public class AdminController {
         return "redirect:/admin/confirm";
     }
 
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @PostMapping("/places/{placeId}/delete")
+    public String deletePlace(
+            @PathVariable Long placeId,
+            RedirectAttributes redirectAttributes
+    ) {
+        placeService.removePlace(placeId);
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places");
+
+        return "redirect:/admin/confirm";
+    }
+
+
     @GetMapping("/places/{placeId}/newEvent")
     public String newEvent(@PathVariable Long placeId, Model model) {
         EventResponse event = placeService.getPlace(placeId)
@@ -99,13 +112,13 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.SEE_OTHER)
     @PostMapping("/places/{placeId}/events")
-    public String createEvent(
+    public String upsertEvent(
             @Valid EventRequest eventRequest,
             @PathVariable Long placeId,
             RedirectAttributes redirectAttributes
     ) {
         AdminOperationStatus status = eventRequest.id() != null ? AdminOperationStatus.MODIFY : AdminOperationStatus.CREATE;
-        eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
+        eventService.upsertEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
 
         redirectAttributes.addFlashAttribute("adminOperationStatus", status);
         redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places/" + placeId);
@@ -113,19 +126,18 @@ public class AdminController {
         return "redirect:/admin/confirm";
     }
 
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @GetMapping("/events/{eventId}/delete")
+    public String deleteEvent(
+            @PathVariable Long eventId,
+            RedirectAttributes redirectAttributes
+    ) {
+        eventService.removeEvent(eventId);
 
-    @GetMapping("/events")
-    public ModelAndView adminEvents(@QuerydslPredicate(root = Event.class) Predicate predicate) {
+        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/events");
 
-        List<EventResponse> events = eventService.getEvents(predicate)
-                .stream()
-                .map(EventResponse::from)
-                .toList();
-
-        return new ModelAndView("admin/events", Map.of(
-                "events", events,
-                "eventStatusOption", EventStatus.values()
-        ));
+        return "redirect:/admin/confirm";
     }
 
     @GetMapping("/events/{eventId}")
