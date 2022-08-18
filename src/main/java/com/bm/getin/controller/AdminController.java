@@ -54,6 +54,7 @@ public class AdminController {
                 .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
 
         return new ModelAndView("admin/place-detail", Map.of(
+                "adminOperationStatus", AdminOperationStatus.MODIFY,
                 "place", place,
                 "placeTypeOption", PlaceType.values()
         ));
@@ -104,7 +105,7 @@ public class AdminController {
         eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
 
         redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
-        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/plcaes/" + placeId);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places/" + placeId);
 
         return "redirect:/admin/confirm";
     }
@@ -120,7 +121,7 @@ public class AdminController {
 
         return new ModelAndView("admin/events", Map.of(
                 "events", events,
-                "eventStatus", EventStatus.values()
+                "eventStatusOption", EventStatus.values()
         ));
     }
 
@@ -131,14 +132,15 @@ public class AdminController {
                 .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
 
         return new ModelAndView("admin/event-detail", Map.of(
+                "adminOperationStatus", AdminOperationStatus.MODIFY,
                 "event", event,
-                "eventStatus", EventStatus.values()
+                "eventStatusOption", EventStatus.values()
         ));
     }
 
     @GetMapping("/confirm")
     public String confirm(Model model) {
-        if (!model.containsAttribute("redirectUtl")) {
+        if (!model.containsAttribute("redirectUrl")) {
             throw new GeneralException(ErrorCode.BAD_REQUEST);
         }
 
