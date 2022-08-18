@@ -2,6 +2,7 @@ package com.bm.getin.service;
 
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
+import com.bm.getin.domain.Event;
 import com.bm.getin.domain.Place;
 import com.bm.getin.dto.EventDto;
 import com.bm.getin.dto.EventViewResponse;
@@ -11,6 +12,7 @@ import com.bm.getin.repository.PlaceRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +67,25 @@ public class EventService {
     public Optional<EventDto> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDto::of);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<EventViewResponse> getEvent(Long placeId, Pageable pageable) {
+        try {
+            Place place = placeRepository.getReferenceById(placeId);
+            Page<Event> eventPage = eventRepository.findByPlace(place, pageable);
+
+            return new PageImpl<>(
+                    eventPage.getContent()
+                            .stream()
+                            .map(event -> EventViewResponse.from(EventDto.of(event)))
+                            .toList(),
+                    eventPage.getPageable(),
+                    eventPage.getTotalElements()
+            );
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }

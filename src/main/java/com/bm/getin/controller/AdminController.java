@@ -4,6 +4,7 @@ import com.bm.getin.constant.AdminOperationStatus;
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
+import com.bm.getin.domain.Event;
 import com.bm.getin.domain.Place;
 import com.bm.getin.dto.*;
 import com.bm.getin.exception.GeneralException;
@@ -11,7 +12,10 @@ import com.bm.getin.service.EventService;
 import com.bm.getin.service.PlaceService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,17 +50,25 @@ public class AdminController {
         ));
     }
 
-    @GetMapping("/places/{placesId}")
-    public ModelAndView adminPlacesDetail(@PathVariable Long placesId) {
-        PlaceResponse place = placeService.getPlace(placesId)
+    @GetMapping("/places/{placeId}")
+    public ModelAndView adminPlaceDetail(
+            @PathVariable Long placeId,
+            @PageableDefault Pageable pageable
+            ) {
+        PlaceResponse place = placeService.getPlace(placeId)
                 .map(PlaceResponse::from)
                 .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+        Page<EventViewResponse> events = eventService.getEvent(placeId, pageable);
 
-        return new ModelAndView("admin/place-detail", Map.of(
-                "adminOperationStatus", AdminOperationStatus.MODIFY,
-                "place", place,
-                "placeTypeOption", PlaceType.values()
-        ));
+        return new ModelAndView(
+                "admin/place-detail",
+                Map.of(
+                        "adminOperationStatus", AdminOperationStatus.MODIFY,
+                        "place", place,
+                        "events", events,
+                        "placeTypeOption", PlaceType.values()
+                )
+        );
     }
 
     @GetMapping("/places/new")
@@ -138,6 +150,22 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("redirectUrl", "/admin/events");
 
         return "redirect:/admin/confirm";
+    }
+
+    @GetMapping("/events")
+    public ModelAndView adminEvents(@QuerydslPredicate(root = Event.class) Predicate predicate) {
+        List<EventResponse> events = eventService.getEvents(predicate)
+                .stream()
+                .map(EventResponse::from)
+                .toList();
+
+        return new ModelAndView(
+                "admin/events",
+                Map.of(
+                        "events", events,
+                        "eventStatusOption", EventStatus.values()
+                )
+        );
     }
 
     @GetMapping("/events/{eventId}")

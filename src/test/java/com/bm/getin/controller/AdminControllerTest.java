@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -76,10 +79,11 @@ class AdminControllerTest {
     @Test
     void givenPlaceId_whenRequestingAdminPlaceDetailPage_thenReturnsAdminPlaceDetailPage() throws Exception {
         // Given
-        long placeId = 1L;
+        Long placeId = 1L;
         given(placeService.getPlace(placeId)).willReturn(Optional.of(
                 PlaceDto.of(placeId, null, null, null, null, null, null, null, null)
         ));
+        given(eventService.getEvent(eq(placeId), any(PageRequest.class))).willReturn(Page.empty());
 
         // When & Then
         mvc.perform(get("/admin/places/" + placeId))
@@ -88,17 +92,19 @@ class AdminControllerTest {
                 .andExpect(view().name("admin/place-detail"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("place"))
+                .andExpect(model().attributeExists("events"))
                 .andExpect(model().attribute("adminOperationStatus", AdminOperationStatus.MODIFY))
                 .andExpect(model().attribute("placeTypeOption", PlaceType.values()));
 
         then(placeService).should().getPlace(placeId);
+        then(eventService).should().getEvent(eq(placeId), any(PageRequest.class));
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 장소 세부 정보 뷰, 데이터 없음")
     @Test
     void givenNonexistentPlaceId_whenRequestingAdminPlaceDetailPage_thenReturnsErrorPage() throws Exception {
         // Given
-        long placeId = 1L;
+        Long placeId = 1L;
         given(placeService.getPlace(placeId)).willReturn(Optional.empty());
 
         // When
@@ -109,6 +115,7 @@ class AdminControllerTest {
 
         // Then
         then(placeService).should().getPlace(placeId);
+        then(eventService).shouldHaveNoInteractions();
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 장소 새로 만들기 뷰")
@@ -140,7 +147,7 @@ class AdminControllerTest {
                 10,
                 null
         );
-        given(placeService.createPlace(placeRequest.toDto())).willReturn(true);
+        given(placeService.upsertPlace(placeRequest.toDto())).willReturn(true);
 
         // When
         mvc.perform(post("/admin/places")
@@ -155,7 +162,7 @@ class AdminControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
         // Then
-        then(placeService).should().createPlace(placeRequest.toDto());
+        then(placeService).should().upsertPlace(placeRequest.toDto());
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 이벤트 리스트 뷰")
@@ -248,7 +255,7 @@ class AdminControllerTest {
         // Given
         long placeId = 1L;
         EventRequest eventRequest = EventRequest.of(null,"test event", EventStatus.OPENED, LocalDateTime.now(), LocalDateTime.now(), 10, 10, null);
-        given(eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)))).willReturn(true);
+        given(eventService.upsertEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)))).willReturn(true);
 
         // When & Then
         mvc.perform(
@@ -262,7 +269,7 @@ class AdminControllerTest {
                 .andExpect(flash().attribute("adminOperationStatus", AdminOperationStatus.CREATE))
                 .andExpect(flash().attribute("redirectUrl", "/admin/places/" + placeId))
                 .andDo(MockMvcResultHandlers.print());
-        then(eventService).should().createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
+        then(eventService).should().upsertEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 기능 확인 페이지")
