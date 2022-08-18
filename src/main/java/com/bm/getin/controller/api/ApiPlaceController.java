@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-    //@RestController
-    //@RequestMapping("/api")
+    @RestController
+    @RequestMapping("/api")
 public class ApiPlaceController {
 
     @GetMapping("/places")
@@ -36,8 +36,8 @@ public class ApiPlaceController {
 
     @GetMapping("/places/{placeId}")
     public ApiDataResponse<PlaceDto> getPlace(@PathVariable Long placeId) {
-        if (placeId.equals(2)) {
-            return ApiDataResponse.of(null);
+        if (placeId.equals(2L)) {
+            return ApiDataResponse.empty();
         }
 
 

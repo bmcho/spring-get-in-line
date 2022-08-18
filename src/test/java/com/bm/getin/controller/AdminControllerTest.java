@@ -132,6 +132,7 @@ class AdminControllerTest {
     void givenNewPlace_whenSavingPlace_thenSavesPlaceAndReturnsToListPage() throws Exception {
         // Given
         PlaceRequest placeRequest = PlaceRequest.of(
+                null,
                 PlaceType.SPORTS,
                 "강남 배드민턴장",
                 "서울시 강남구 강남동",
@@ -246,7 +247,7 @@ class AdminControllerTest {
     void givenNewEvent_whenSavingEvent_thenSavesEventAndReturnsToListPage() throws Exception {
         // Given
         long placeId = 1L;
-        EventRequest eventRequest = EventRequest.of("test event", EventStatus.OPENED, LocalDateTime.now(), LocalDateTime.now(), 10, 10, null);
+        EventRequest eventRequest = EventRequest.of(null,"test event", EventStatus.OPENED, LocalDateTime.now(), LocalDateTime.now(), 10, 10, null);
         given(eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)))).willReturn(true);
 
         // When & Then
@@ -287,7 +288,7 @@ class AdminControllerTest {
     @Test
     void givenPlaceObject_whenConverting_thenReturnsFormData() {
         // Given
-        PlaceRequest placeRequest = PlaceRequest.of(PlaceType.SPORTS, "강남 배드민턴장", "서울시 강남구 강남동", "010-1231-2312", 10, null);
+        PlaceRequest placeRequest = PlaceRequest.of(null,PlaceType.SPORTS, "강남 배드민턴장", "서울시 강남구 강남동", "010-1231-2312", 10, null);
 
         // When
         String result = objectToFormData(placeRequest);

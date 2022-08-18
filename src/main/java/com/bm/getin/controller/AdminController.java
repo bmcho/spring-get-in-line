@@ -4,6 +4,7 @@ import com.bm.getin.constant.AdminOperationStatus;
 import com.bm.getin.constant.ErrorCode;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
+import com.bm.getin.domain.Admin;
 import com.bm.getin.domain.Event;
 import com.bm.getin.domain.Place;
 import com.bm.getin.dto.*;
@@ -70,13 +71,14 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.SEE_OTHER)
     @PostMapping("/places")
-    public String createPlace(
+    public String upsertPlace(
             @Valid PlaceRequest placeRequest,
             RedirectAttributes redirectAttributes
     ) {
-        placeService.createPlace(placeRequest.toDto());
+        AdminOperationStatus status = placeRequest.id() != null ? AdminOperationStatus.MODIFY : AdminOperationStatus.CREATE;
+        placeService.upsertPlace(placeRequest.toDto());
 
-        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        redirectAttributes.addFlashAttribute("adminOperationStatus", status);
         redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places");
 
         return "redirect:/admin/confirm";
@@ -102,9 +104,10 @@ public class AdminController {
             @PathVariable Long placeId,
             RedirectAttributes redirectAttributes
     ) {
+        AdminOperationStatus status = eventRequest.id() != null ? AdminOperationStatus.MODIFY : AdminOperationStatus.CREATE;
         eventService.createEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
 
-        redirectAttributes.addFlashAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        redirectAttributes.addFlashAttribute("adminOperationStatus", status);
         redirectAttributes.addFlashAttribute("redirectUrl", "/admin/places/" + placeId);
 
         return "redirect:/admin/confirm";
