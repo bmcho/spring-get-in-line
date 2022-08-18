@@ -3,6 +3,7 @@ package com.bm.getin.dto;
 import com.bm.getin.constant.PlaceType;
 
 public record PlaceRequest(
+        Long id,
         PlaceType placeType,
         String placeName,
         String address,
@@ -11,6 +12,7 @@ public record PlaceRequest(
         String memo
 ) {
     public static PlaceRequest of(
+            Long id,
             PlaceType placeType,
             String placeName,
             String address,
@@ -18,6 +20,20 @@ public record PlaceRequest(
             Integer capacity,
             String memo
     ) {
-        return new PlaceRequest(placeType, placeName, address, phoneNumber, capacity, memo);
+        return new PlaceRequest(id, placeType, placeName, address, phoneNumber, capacity, memo);
+    }
+
+    public PlaceDto toDto() {
+        return PlaceDto.of(
+                this.id(),
+                this.placeType(),
+                this.placeName(),
+                this.address(),
+                this.phoneNumber(),
+                this.capacity(),
+                this.memo(),
+                null,
+                null
+        );
     }
 }

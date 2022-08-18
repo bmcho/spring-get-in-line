@@ -1,6 +1,7 @@
 package com.bm.getin.dto;
 
 import com.bm.getin.constant.EventStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,17 +10,17 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 public record EventRequest(
-        @NotNull @Positive Long placeId,
+        Long id,
         @NotBlank String eventName,
         @NotNull EventStatus eventStatus,
-        @NotNull LocalDateTime eventStartDatetime,
-        @NotNull LocalDateTime eventEndDatetime,
+        @NotNull @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
+        @NotNull @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime,
         @NotNull @PositiveOrZero Integer currentNumberOfPeople,
         @NotNull @PositiveOrZero Integer capacity,
         String memo
 ) {
     public static EventRequest of(
-            Long placeId,
+            Long id,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
@@ -29,7 +30,7 @@ public record EventRequest(
             String memo
     ) {
         return new EventRequest(
-                placeId,
+                id,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
@@ -40,10 +41,10 @@ public record EventRequest(
         );
     }
 
-    public EventDto ToDto() {
+    public EventDto toDto(PlaceDto placeDto) {
         return EventDto.of(
-                null,
-                null, // TODO: 추후 적절하게 수정
+                this.id(),
+                placeDto,
                 this.eventName(),
                 this.eventStatus(),
                 this.eventStartDatetime(),

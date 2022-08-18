@@ -16,6 +16,11 @@ public record PlaceDto(
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {
+
+    public static PlaceDto idOnly(Long id) {
+        return PlaceDto.of(id, null, null, null, null, null, null, null, null);
+    }
+
     public static PlaceDto of(
             Long id,
             PlaceType placeType,
