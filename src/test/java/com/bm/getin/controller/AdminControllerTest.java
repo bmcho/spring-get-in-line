@@ -1,5 +1,6 @@
 package com.bm.getin.controller;
 
+import com.bm.getin.config.SecurityCustomConfig;
 import com.bm.getin.constant.AdminOperationStatus;
 import com.bm.getin.constant.EventStatus;
 import com.bm.getin.constant.PlaceType;
@@ -11,8 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -37,7 +41,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 어드민")
-@WebMvcTest(AdminController.class)
+@WebMvcTest(
+        controllers = AdminController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE, classes = SecurityCustomConfig.class)
+)
 class AdminControllerTest {
     private final MockMvc mvc;
     @MockBean
@@ -254,7 +263,7 @@ class AdminControllerTest {
     void givenNewEvent_whenSavingEvent_thenSavesEventAndReturnsToListPage() throws Exception {
         // Given
         long placeId = 1L;
-        EventRequest eventRequest = EventRequest.of(null,"test event", EventStatus.OPENED, LocalDateTime.now(), LocalDateTime.now(), 10, 10, null);
+        EventRequest eventRequest = EventRequest.of(null, "test event", EventStatus.OPENED, LocalDateTime.now(), LocalDateTime.now(), 10, 10, null);
         given(eventService.upsertEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)))).willReturn(true);
 
         // When & Then
@@ -295,7 +304,7 @@ class AdminControllerTest {
     @Test
     void givenPlaceObject_whenConverting_thenReturnsFormData() {
         // Given
-        PlaceRequest placeRequest = PlaceRequest.of(null,PlaceType.SPORTS, "강남 배드민턴장", "서울시 강남구 강남동", "010-1231-2312", 10, null);
+        PlaceRequest placeRequest = PlaceRequest.of(null, PlaceType.SPORTS, "강남 배드민턴장", "서울시 강남구 강남동", "010-1231-2312", 10, null);
 
         // When
         String result = objectToFormData(placeRequest);
