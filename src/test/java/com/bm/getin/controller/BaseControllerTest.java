@@ -40,10 +40,8 @@ class BaseControllerTest {
 
         // When & Then
         mvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML_VALUE))
-                .andExpect(content().string(containsString("Hello default page")))
-                .andExpect(view().name("index"))
-                .andDo(print());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/events"))
+                .andExpect(view().name("redirect:/events"));
     }
 }
