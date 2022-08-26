@@ -10,12 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 public class SecurityCustomConfig {
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
     @Autowired
     public void configureGlobal(
             AuthenticationManagerBuilder auth,
@@ -24,8 +22,6 @@ public class SecurityCustomConfig {
     ) throws Exception {
         auth.userDetailsService(adminService).passwordEncoder(passwordEncoder);
     }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
