@@ -6,6 +6,9 @@
 </head>
 <body>
 <p>
+    <a id="logout">로그아웃</a>
+</p>
+<p>
     <span id="placeTitle">This is admin place detail page.</span>
 </p>
 <form id="placeForm">
@@ -44,6 +47,7 @@
         </tbody>
     </table>
     <input type="hidden" id="placeId" name="id">
+    <input type="hidden" id="csrf">
 </form>
 <button id="savePlace" type="submit">저장</button>
 <button id="removePlace" type="button">삭제</button>

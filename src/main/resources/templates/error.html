@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -8,13 +8,9 @@
 <p>
   This is <span th:text="${statusCode} ?: _">???</span> error page.
 </p>
-<ol>
-  <li>
-    errorCode: <span th:text="${statusCode} ?: _">?</span>
-  </li>
-  <li>
-    message: <span th:text="${message} ?: _">?</span>
-  </li>
-</ol>
+<ul>
+  <li>errorCode: <span th:text="${errorCode} ?: _">?</span></li>
+  <li>message: <span th:text="${message} ?: _">?</span></li>
+</ul>
 </body>
 </html>

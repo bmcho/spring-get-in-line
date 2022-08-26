@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 public class SecurityCustomConfig {
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -25,21 +24,23 @@ public class SecurityCustomConfig {
         auth.userDetailsService(adminService).passwordEncoder(passwordEncoder);
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/event/**", "/places/**")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                    .anyRequest()
+                    .authenticated()
                 .and()
                 .formLogin()
-                .permitAll()
+                    .permitAll()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/admin/places")
                 .and()
                 .logout()
-                .permitAll()
-                .logoutSuccessUrl("/")
+                    .permitAll()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
         ;
 
         return http.build();

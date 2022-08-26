@@ -21,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -167,8 +166,7 @@ class AdminControllerTest {
                 .andExpect(view().name("redirect:/admin/confirm"))
                 .andExpect(redirectedUrl("/admin/confirm"))
                 .andExpect(flash().attribute("adminOperationStatus", AdminOperationStatus.CREATE))
-                .andExpect(flash().attribute("redirectUrl", "/admin/places"))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(flash().attribute("redirectUrl", "/admin/places"));
 
         // Then
         then(placeService).should().upsertPlace(placeRequest.toDto());
@@ -276,8 +274,8 @@ class AdminControllerTest {
                 .andExpect(view().name("redirect:/admin/confirm"))
                 .andExpect(redirectedUrl("/admin/confirm"))
                 .andExpect(flash().attribute("adminOperationStatus", AdminOperationStatus.CREATE))
-                .andExpect(flash().attribute("redirectUrl", "/admin/places/" + placeId))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(flash().attribute("redirectUrl", "/admin/places/" + placeId));
+
         then(eventService).should().upsertEvent(eventRequest.toDto(PlaceDto.idOnly(placeId)));
     }
 
@@ -296,8 +294,7 @@ class AdminControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("admin/confirm"))
                 .andExpect(model().attribute("adminOperationStatus", AdminOperationStatus.CREATE))
-                .andExpect(model().attribute("redirectUrl", "/admin/places"))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(model().attribute("redirectUrl", "/admin/places"));
     }
 
     @DisplayName("장소 객체를 form data 로 변환")

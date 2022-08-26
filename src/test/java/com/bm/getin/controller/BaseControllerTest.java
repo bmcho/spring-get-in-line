@@ -8,12 +8,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 기본 페이지")
@@ -40,10 +37,8 @@ class BaseControllerTest {
 
         // When & Then
         mvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML_VALUE))
-                .andExpect(content().string(containsString("Hello default page")))
-                .andExpect(view().name("index"))
-                .andDo(print());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/events"))
+                .andExpect(view().name("redirect:/events"));
     }
 }
